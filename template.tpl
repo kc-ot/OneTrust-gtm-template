@@ -513,22 +513,22 @@ if(data.useConsentMode){
     setDefaultConsentState(regionalDefault);
   });
   
-  //Update with previous consent from OneTrust cookie if it already exists
+  // Update with previous consent from OneTrust cookie if it already exists
+
+  let consentCookie = getCookie("OptanonConsent") && getCookie("OptanonConsent")[0];
   let optanonAlertBoxClosed = getCookie("OptanonAlertBoxClosed");
   if (optanonAlertBoxClosed) {
-  let consentCookie = getCookie("OptanonConsent")[0];
-  if (consentCookie) {
-    let previousConsent = {};
-    data.gcmMapping.forEach(category => {
-      previousConsent[category.gcmCategory] = isCategoryConsentInCookie(consentCookie, category.oneTrustCatId);
-    });
+    if (consentCookie) {
+      let previousConsent = {};
+      data.gcmMapping.forEach(category => {
+        previousConsent[category.gcmCategory] = isCategoryConsentInCookie(consentCookie, category.oneTrustCatId);
+      });
 
-    updateConsentState(previousConsent);
+      updateConsentState(previousConsent);
+    }
   }
-}
 
 
-  
   //Add callback to window so that GCM is updated when consent changes
   setInWindow("otEventListeners", [{event:"consent.changed", listener:updateConsent}], false);
   
